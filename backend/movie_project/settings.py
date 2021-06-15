@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import datetime
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,8 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
+# 비밀키 관리
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, '.env')
+)
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'fvi1lfv3v1^_bsh%)x#u=!9z-f81l*!qrxfyhz9edtr=p*sv48'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,6 +43,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'character',
     'rest_framework',
-    'corsheaders',
+    'import_export',
+
 ]
 
 MIDDLEWARE = [
@@ -54,18 +68,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',  # React 도메인
-    'http://localhost:8000',  # Django 도메인
-    'http://localhost',  # Django 도메인
-    'http://web:3000',  # React 도메인
-    'http://web:8000',  # Django 도메인
-    'http://web',  # Django 도메인
-    'http://elice-kdt-ai-track-vm-da-05.koreacentral.cloudapp.azure.com',  # Django 도메인
-    'http://elice-kdt-ai-track-vm-da-05.koreacentral.cloudapp.azure.com:3000',  # React 도메인
-    'http://elice-kdt-ai-track-vm-da-05.koreacentral.cloudapp.azure.com:8000',  # React 도메인
-)
 
 
 ROOT_URLCONF = 'movie_project.urls'
@@ -94,15 +96,10 @@ WSGI_APPLICATION = 'movie_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'movie',
-        'USER': 'elice',
-        'PASSWORD': 'admin1234',
-        'HOST': 'elice-kdt-ai-track-vm-da-05.koreacentral.cloudapp.azure.com',
-        'PORT': '5433',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
