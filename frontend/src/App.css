@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+
+* {
+  font-family: 'Do Hyeon', sans-serif;
+}
+
+html, body {
+  height: 100vh;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+#root {
+  min-height: 100vh;
+  text-align: center;
+}
+
+.slick-prev:before, 
+.slick-next:before {
+  color: black
+}
+
+.villain-name {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+  height: 60px;
+  border-style: solid;
+  border-image: linear-gradient(to right, #c33764, #1d2671);
+  border-image-slice: 1;
+  border-image-width: 0 0 20px 0;
+}
+
+.mvti {
+  background: linear-gradient(to right, #c33764, #1d2671);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

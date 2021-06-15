@@ -3,10 +3,9 @@
 ## ABOUT MVTI
 
 1. [프로젝트 소개](#1-프로젝트-소개)
+   - [서비스 개요](#서비스-개요)
    - [데이터 세트](#데이터-세트)
    - [기술 스택](#기술-스택)
-   - [라이브러리](#라이브러리)
-   - [서비스 개요](#서비스-개요)
 2. [프로젝트 목표](#2-프로젝트-목표)
    - [프로젝트 아이디어](#프로젝트-아이디어)
    - [요구사항 도출](#요구사항-도출)
@@ -23,26 +22,55 @@
 7. [FAQ](#7-FAQ)
 
 ## 1. 프로젝트 소개
-
-### 데이터 세트
-
-- 다양한 작품의 대본 데이터
-- 작품 내 악역의 대사 데이터
-
-### 기술 스택
-
-- React + TypeScript
-- Django
-
-### 라이브러리
-
-- 전처리(Preprocessing)
-  - Numpy, Matplotlib, Wordcloud, Pandas
-
 ### 서비스 개요
 
 - 영화 작품 속 악역의 성향과 이용자의 성향을 분석하여 비교하고 성향이 일치하는 정도를 결과로 제공하는 서비스
 - [프로젝트 제안서](https://www.notion.so/75f92035db464471bd947cf7ef3abca0)
+
+### 데이터 세트
+
+- 다양한 작품 내 악역의 대사 데이터
+  - 스타워즈 에피소드 4 : 새로운 희망(1977), 다스베이더
+  - 스타워즈 에피소드 5: 제국의 역습(1980), 다스베이더
+  - 스타워즈 에피소드 6: 제다이의 귀환(1983), 다스베이더
+  - 양들의 침묵(1991), 한니발 렉터
+  - 라이온 킹(1994), 스카
+  - 스폰지밥 시리즈(1999), 플랑크톤
+  - 쏘우(2004), 직소
+  - 다크나이트(2008), 조커
+  - 셜록 시리즈(2010), 짐 모리아티
+  - 겨울왕국(2013), 한스 웨스터가드
+  - 위플래시(2014), 플래쳐
+  - 마이펫의 이중생활(2016): 스노우볼
+  - 어벤져스: 인피니티 워(2018), 타노스
+  - 어벤져스: 엔드게임(2019), 타노스
+  - 버즈 오브 프레이(2020), 할리퀸
+- 자세한 출처 [참고](https://www.notion.so/fb9f17e552494976ae091dc72438ca69)
+
+### 기술 스택
+
+- 프론트엔드
+  - Language : TypeScript
+  - Frameworks : React
+  - Libraries : axios, chart.js, wordcloud, react-slick, material-ui
+  - Lint Tools : eslint, prettier
+- 백엔드
+  - Language : Python3
+  - Database : PostgreSQL 
+  - Frameworks : Django
+  - Libraries : Django Rest Framework
+  - Lint Tools : autopep8
+- 데이터 분석
+  - Language : Python3
+  - Libraries : nltk, nrclex, numpy, pandas, sklearn, wordcloud, matplotlib
+- DevOps
+  - Operating Systems : MS Azure VM Ubuntu 18.04.5 LTS
+  - Container : docker, docker-compose
+  - Web Server : Nginx
+  - Application Server : Gunicorn
+  - CI/CD : Jenkins
+- 유틸리티
+  - VCS : git 
 
 ## 2. 프로젝트 목표
 
@@ -65,7 +93,7 @@
 ### 주요 기능
 
 - 영화 대본 분석을 통해 특정 캐릭터의 성향 파악
-- 키워드 양자택일 형식에서 사용자의 선택을 바탕으로 성향 분석
+- 키워드 선택 형식에서 사용자의 선택을 바탕으로 성향 분석
 - 사용자의 성향 분석을 통해 악역 캐릭터와의 매칭 수치를 시각화하여 제공
 
 ### 기대 효과
@@ -94,7 +122,6 @@
 | 하성민 | Developer                 | Front-End |
 | 이지민 | Developer                 | Back-End  |
 | 현암   | Developer                 | Back-End  |
-| 류은제 | Developer                 | Back-End  |
 
 ### 책임
 
@@ -122,5 +149,13 @@
 
 ## 7. FAQ
 
-- 자주 받는 질문에 대해서는 추후에 정리하겠습니다.
-- 서비스에 대한 문의사항은 issue에 남겨주세요!
+- Q. 캐릭터의 성향 분석은 어떻게 이루어지나요? 
+  - A. nltk 라이브러리의 [SentimentIntensityAnalyzer](https://www.nltk.org/_modules/nltk/sentiment/vader.html#SentimentIntensityAnalyzer) 모듈을 통해 각 캐릭터 대사의 단어 별 Vader 점수를 계산하여 긍/부정 성향을 가지는 단어를 추출한 후, [nrclex](https://github.com/metalcorebear/NRCLex) 라이브러리의 감정 사전을 이용하여 단어에 드러난 감정을 10가지 종류로 분류했습니다. 
+- Q. 캐릭터의 성향 분석 기준이 무엇인가요?
+  - A. 해당 [페이지](https://www.notion.so/5f055f440c1f413d83f4cd160c0df47f?v=65fbef7f4a9a419a908efd103d548149)를 참고 바랍니다. 
+- Q. 사용자 성향의 분석은 어떻게 이루어지나요? 
+  - A. 캐릭터의 대사 데이터 모음 내에서 Vader 점수 기준 중립 성향이 아닌 단어 중 등장 빈도 수가 높은 단어들을 조합하여 사용자에게 선택지로 제시한 후, 캐릭터 분석 모델과 동일한 모델을 통해 사용자 답변 데이터를 분석합니다. 
+- Q. 캐릭터 매칭은 어떻게 이루어지나요? 
+  - 분석한 사용자 성향을 바탕으로 각 캐릭터와의 코사인 유사도를 계산하여 가장 유사도가 높은 캐릭터를 제시합니다.
+- Q. 서비스에 대한 추가적인 문의사항은 어디에 남기면 되나요?
+  - A. `Issues -> 새 이슈 작성`을 통해로 문의주시기 부탁드립니다. 
